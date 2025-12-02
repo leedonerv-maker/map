@@ -35,4 +35,4 @@ for point in route_points[::3]:  # 일정 간격마다 생성
 
 # --- 6. 지도 저장 ---
 m.save("fake_commute_map.html")
-print("완료! fake_co_
+print("완료! fake_commute_map.html을 브라우저에서 열어보세요.")
