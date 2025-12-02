@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>퇴근길 추천 지도</title>
+    <meta charset="utf-8">
+    <style>
+        #map {
+            height: 100vh;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+
+    <!-- Google Maps JavaScript API -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places"></script>
+    <script>
+        let map;
+        let directionsService;
+        let directionsRenderer;
+
+        // 예시 출발지(회사)와 도착지(집)
+        const company = {lat: 37.5665, lng: 126.9780}; // 서울시청
+        const home = {lat: 37.5512, lng: 126.9882};    // 집 위치
+
+        function initMap() {
+            map = new google.maps.Map(document.getElementById("map"), {
+                center: company,
+                zoom: 13,
+            });
+
+            directionsService = new google.maps.DirectionsService();
+            directionsRenderer = new google.maps.DirectionsRenderer({map: map});
+
+            calculateRoute();
+        }
+
+        function calculateRoute() {
+            directionsService.route(
+                {
+                    origin: company,
+                    destination: home,
+                    travelMode: google.maps.TravelMode.DRIVING
+                },
+                (response, status) => {
+                    if (status === "OK") {
+                        directionsRenderer.setDirections(response);
+                        const route = response.routes[0].overview_path;
+                        findNearbyPlaces(route);
+                    } else {
+                        alert("경로 계산 실패: " + status);
+                    }
+                }
+            );
+        }
+
+        function findNearbyPlaces(route) {
+            const service = new google.maps.places.PlacesService(map);
+
+            // 경로 상 일정 간격으로 주변 장소 검색
+            route.forEach((point, index) => {
+                if (index % 10 === 0) { // 일정 간격마다 검색
+                    const request = {
+                        location: point,
+                        radius: 500, // 500m 반경
+                        type: ['cafe', 'restaurant'] // 추천 장소 유형
+                    };
+
+                    service.nearbySearch(request, (results, status) => {
+                        if (status === google.maps.places.PlacesServiceStatus.OK) {
+                            results.forEach(place => {
+                                new google.maps.Marker({
+                                    map: map,
+                                    position: place.geometry.location,
+                                    title: place.name
+                                });
+                            });
+                        }
+                    });
+                }
+            });
+        }
+
+        window.onload = initMap;
+    </script>
+</body>
+</html>
