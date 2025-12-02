@@ -2,7 +2,7 @@ import googlemaps
 import folium
 
 # --- 1. 구글 API 키 ---
-API_KEY = 'U7Lsl2sRN2PSHf0UwhmSRzMbRfqWqpp/scMxRlz9JMQ='  # 본인 API 키로 교체
+API_KEY = 'em64XLvVn3/XFdnibo+GKYdEbT2sxIhpnYtjb4fuaxidBdtFcA3g3Q=='  # 본인 API 키로 교체
 gmaps = googlemaps.Client(key=API_KEY)
 
 # --- 2. 출발지(회사) / 도착지(집) ---
