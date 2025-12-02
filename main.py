@@ -1,3 +1,6 @@
+!pip install folium
+
+
 import folium
 import random
 
