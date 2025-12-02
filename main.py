@@ -22,7 +22,7 @@ st.markdown(
 )
 
 # ----------------------------
-# 2. 출발지/도착지 설정 (가상 좌표)
+# 2. 출발지 / 도착지 설정 (가상 좌표)
 # ----------------------------
 company = (37.5665, 126.9780)  # 서울시청
 home = (37.5512, 126.9882)     # 남산타워
@@ -56,9 +56,9 @@ folium.PolyLine(
 # 5. 추천 장소 상태 관리
 # ----------------------------
 if "markers" not in st.session_state:
-    st.session_state.markers = []
+    st.session_state.markers = []  # 항상 빈 리스트로 초기화
 
-# 버튼 클릭 시 마커 생성
+# 버튼 클릭 시 추천 장소 생성
 if st.button("추천 장소 보기"):
     place_types = {
         '카페': 'blue',
@@ -66,7 +66,7 @@ if st.button("추천 장소 보기"):
         '편의점': 'green'
     }
     new_markers = []
-    for point in route_points[::3]:
+    for point in route_points[::3]:  # 일정 간격마다 생성
         for _ in range(random.randint(1, 3)):
             lat_offset = random.uniform(-0.001, 0.001)
             lng_offset = random.uniform(-0.001, 0.001)
@@ -81,7 +81,8 @@ if st.button("추천 장소 보기"):
 # ----------------------------
 # 6. 지도에 마커 표시
 # ----------------------------
-for lat, lng, name, color in st.session_state.markers:
+for marker in st.session_state.markers:
+    lat, lng, name, color = marker  # 항상 4개로 unpack
     folium.Marker(
         [lat, lng],
         popup=f"<b>{name}</b>",
