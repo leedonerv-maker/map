@@ -1,4 +1,5 @@
 
+from streamlit_folium import st_folium
 
 import folium
 import random
